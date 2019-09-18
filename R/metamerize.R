@@ -15,6 +15,7 @@
 #' @param N Number of iterations.
 #' @param trim Max number of metamers to return.
 #' @param perturbation Numeric with the magnitude of the random perturbations.
+#' Can be of length 1 or `length(change)`.
 #' @param annealing Logical indicating whether to perform annealing.
 #' @param name Character for naming the metamers.
 #' @param verbose Logical indicating whether to show a progress bar.
@@ -32,9 +33,15 @@
 #' last metamer of the list. Furthermore, if `preserve` and/or `minimize`
 #' are missing, the previous functions will be carried over from the previous call.
 #'
+#' `minimize` can be also a *vector* of functions. In that case, the process minimizes
+#' the product of the functions applied to the data.
+#'
 #' @seealso [delayed_with()] for a convenient way of making functions suitable for
 #' `preserve`, [mean_dist_to()] for a convenient way of minimizing the distance
-#' to a known target in `minimize`.
+#' to a known target in `minimize`, [mean_self_proximity()] for maximizing the
+#' "self distance" to prevent data clumping.
+#'
+#'
 #'
 #' @return
 #' A `metamer_list` object (a list of data.frames).
@@ -139,7 +146,15 @@ metamerize.data.frame <- function(data,
 
   pb_format <- " :m metamers [:bar] ~ eta: :eta"
   if (!is.null(minimize)) {
-    minimize <- match.fun(minimize)
+    if (length(minimize) > 1) {
+      min_funs <- minimize
+      minimize <- function(data) {
+        Reduce("*", lapply(seq_along(minimize), function(i) match.fun(min_funs[[i]])(data)))
+      }
+    } else {
+      minimize <- match.fun(minimize)
+    }
+
     history[m] <- minimize(data)
     minimize_org <- history[m]
     pb_format <- ":m metamers [:bar] ratio: :d ~ eta: :eta"
@@ -168,6 +183,11 @@ metamerize.data.frame <- function(data,
                                       clear = FALSE)
   bar_every <- 500
 
+  perturb_ok <- length(perturbation) == 1 || length(perturbation) == ncols
+  if (!perturb_ok) {
+    stop("perturbation must be of length 1 or length(change)")
+  }
+
   for (i in seq_len(N)) {
     if (verbose & (i %% bar_every == 0)) {
       if (!is.null(minimize)) {
@@ -179,8 +199,14 @@ metamerize.data.frame <- function(data,
     }
     temp <- M_temp + ((i-1)/(N-1))^2*(m_temp - M_temp)
 
-    new_data[, c(change)] <- metamers[[m]][, c(change)] + matrix(rnorm(npoints, 0, perturbation),
-                                                                 nrow = nrows, ncol = ncols)
+    new_change <- matrix(rnorm(npoints, 0, perturbation),
+                     nrow = nrows, ncol = ncols, byrow = TRUE)
+
+    old <- as.matrix(metamers[[m]][change])
+    new <- old + new_change
+
+    new_data[change] <- new
+
     new_exact <- preserve(new_data)
 
     if (!all(signif(new_exact, signif) - signif(org_exact, signif) == 0)) {
@@ -206,15 +232,15 @@ metamerize.data.frame <- function(data,
   p_bar$terminate()
 
   metamers <- new_metamer_list(metamers[seq_len(m)],
-                          history[seq_len(m)],
-                          preserve,
-                          minimize,
-                          change,
-                          signif,
-                          org_exact,
-                          annealing,
-                          perturbation,
-                          name = rep(name, length(m)))
+                               history[seq_len(m)],
+                               preserve,
+                               minimize,
+                               change,
+                               signif,
+                               org_exact,
+                               annealing,
+                               perturbation,
+                               name = rep(name, length(m)))
   return(trim(metamers, trim))
 }
 

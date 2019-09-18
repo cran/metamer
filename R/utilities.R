@@ -17,12 +17,27 @@
 #' @family helper functions
 #' @export
 mean_dist_to <- function(target) {
+  force(target)
   target <- as.matrix(target)
   function(data) {
     mean(FNN::get.knnx(target, as.matrix(data), k = 1)$nn.dist)
   }
 }
 
+#' Inverse of the mean self distance
+#'
+#' Returns the inverse of the mean minimum distance between different pairs of points.
+#' It's intended to be used as a minimizing function to, then, maximize the distance between
+#' points.
+#'
+#' @param data a data.frame
+#'
+#' @family helper functions
+#' @export
+mean_self_proximity <- function(data) {
+  data <- as.matrix(data)
+  1/mean(FNN::get.knnx(data, data, k = 2)$nn.dist[, 2])
+}
 
 #' Apply expressions to data.frames
 #'
@@ -69,13 +84,17 @@ delayed_with <- function(...) {
 #' @export
 trim <- function(object, n = length(object)) {
   N <- length(object)
-  gap <- round((N - 3)/(n-2))
-  if (N > n) {
+  if (n == 2) {
+    keep <- c(1, N)
+  } else if (n == 1) {
+    keep  <- N
+  } else if (N > n){
     gap <- round((N - 3)/(n - 2))
     keep <- c(1, round(seq(1 + gap, N - gap, length.out = n - 2)), N)
   } else {
     keep <- seq_len(N)
   }
+
   new <- object[keep]
   mostattributes(new) <- attributes(object)
   attr(new, "name") <- attr(object, "name")[keep]

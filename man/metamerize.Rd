@@ -30,7 +30,8 @@ preserved.}
 
 \item{annealing}{Logical indicating whether to perform annealing.}
 
-\item{perturbation}{Numeric with the magnitude of the random perturbations.}
+\item{perturbation}{Numeric with the magnitude of the random perturbations.
+Can be of length 1 or \code{length(change)}.}
 
 \item{name}{Character for naming the metamers.}
 
@@ -54,6 +55,9 @@ local minimums.
 If \code{data} is a \code{metamer_list}, the function will start the algorithm from the
 last metamer of the list. Furthermore, if \code{preserve} and/or \code{minimize}
 are missing, the previous functions will be carried over from the previous call.
+
+\code{minimize} can be also a \emph{vector} of functions. In that case, the process minimizes
+the product of the functions applied to the data.
 }
 \examples{
 data(cars)
@@ -86,5 +90,6 @@ Matejka, J., & Fitzmaurice, G. (2017). Same Stats, Different Graphs. Proceedings
 \seealso{
 \code{\link[=delayed_with]{delayed_with()}} for a convenient way of making functions suitable for
 \code{preserve}, \code{\link[=mean_dist_to]{mean_dist_to()}} for a convenient way of minimizing the distance
-to a known target in \code{minimize}.
+to a known target in \code{minimize}, \code{\link[=mean_self_proximity]{mean_self_proximity()}} for maximizing the
+"self distance" to prevent data clumping.
 }
