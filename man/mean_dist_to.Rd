@@ -4,10 +4,13 @@
 \alias{mean_dist_to}
 \title{Mean minimum distance}
 \usage{
-mean_dist_to(target)
+mean_dist_to(target, squared = TRUE)
 }
 \arguments{
 \item{target}{A \code{data.frame} with all numeric columns.}
+
+\item{squared}{Logical indicating whether to compute the mean squared
+distance (if \code{TRUE}) or the mean distance.}
 }
 \value{
 A function that takes a \code{data.frame} with the same number of columns as
@@ -24,9 +27,13 @@ distance(data)
 
 }
 \seealso{
-Other helper functions: \code{\link{delayed_with}},
-  \code{\link{densify}}, \code{\link{draw_data}},
-  \code{\link{mean_self_proximity}},
-  \code{\link{moments_n}}
+Other helper functions: 
+\code{\link{delayed_with}()},
+\code{\link{densify}()},
+\code{\link{draw_data}()},
+\code{\link{mean_dist_to_sf}()},
+\code{\link{mean_self_proximity}()},
+\code{\link{moments_n}()},
+\code{\link{truncate_to}()}
 }
 \concept{helper functions}

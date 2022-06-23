@@ -6,8 +6,7 @@
 \alias{metamer-package}
 \title{metamer: Create Data with Identical Statistics}
 \description{
-Creates data with identical statistics (metamers) using an iterative 
-   algorithm proposed by Matejka & Fitzmaurice (2017) <DOI:10.1145/3025453.3025912>.
+Creates data with identical statistics (metamers) using an iterative algorithm proposed by Matejka & Fitzmaurice (2017) \doi{10.1145/3025453.3025912}.
 }
 \section{Overview}{
 
@@ -20,10 +19,9 @@ the point density of those drawings.
 \item \code{\link[=delayed_with]{delayed_with()}} for defining statistics to preserve.
 \item \code{\link[=moments_n]{moments_n()}} for preserving moments of order n.
 \item \code{\link[=mean_dist_to]{mean_dist_to()}} for minimizing the mean distance to a known target dataset.
-\item \code{\link[=trim]{trim()}} for keeping only some metamers.
 }
 
-The \code{\link[=as.data.frame]{as.data.frame()}} method included will turn a \code{metamer_list} into a tidy
+The \code{\link[=as.data.frame]{as.data.frame()}}/\verb{[data.table::as.data.table()] methods included will turn a }metamer_list` into a tidy
 data.frame.
 
 Inspired by Matejka & Fitzmaurice (2017) awesome paper.
@@ -35,13 +33,13 @@ Matejka, J., & Fitzmaurice, G. (2017). Same Stats, Different Graphs. Proceedings
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/eliocamp/metamer}
+  \item \url{https://eliocamp.github.io/metamer/}
   \item Report bugs at \url{https://github.com/eliocamp/metamer/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Elio Campitelli \email{elio.campitelli@cima.fcen.uba.ar} (0000-0002-7742-9230)
+\strong{Maintainer}: Elio Campitelli \email{elio.campitelli@cima.fcen.uba.ar} (\href{https://orcid.org/0000-0002-7742-9230}{ORCID})
 
 }
 \keyword{internal}

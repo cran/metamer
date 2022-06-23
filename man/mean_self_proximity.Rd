@@ -15,8 +15,13 @@ It's intended to be used as a minimizing function to, then, maximize the distanc
 points.
 }
 \seealso{
-Other helper functions: \code{\link{delayed_with}},
-  \code{\link{densify}}, \code{\link{draw_data}},
-  \code{\link{mean_dist_to}}, \code{\link{moments_n}}
+Other helper functions: 
+\code{\link{delayed_with}()},
+\code{\link{densify}()},
+\code{\link{draw_data}()},
+\code{\link{mean_dist_to_sf}()},
+\code{\link{mean_dist_to}()},
+\code{\link{moments_n}()},
+\code{\link{truncate_to}()}
 }
 \concept{helper functions}
